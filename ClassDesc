@@ -1,0 +1,66 @@
+quick class descriptions, not final doc to turn in:
+
+main.cc
+
+-Handles file i/o boilerplate stuff
+-configs RN seed, station count spread, election day length, & mean a dev voting time
+-reads precinct data
+-calls simulation.cc (appears to be the main work class)
+
+main.h
+
+-headerfile for main.cc
+-thats about it
+
+myrandom.cc
+
+-generates random numbers
+
+myrandom.h
+
+-headerfile for myrandom.cc
+
+onevoter.cc
+
+-appears to be a class to hold the data to represent a voter
+-includes default and parameterized constructor
+-accessors, etc
+
+onevoter.h 
+
+-headerfile for onevoter.cc
+-includes declaration for most data variables
+
+onepct.cc
+
+-i believe this represents one precinct
+-normal accessors, has a ReadData to initialize, etc
+-general functions computeMeanAndDev, CreateVoters, DoStatistics, RunSimulationPct, RunSimulationPct2
+
+onepct.h
+
+-headerfile for onepct.cc
+-contains declaration for most data variables and containers
+
+simulation.cc
+
+-reads in precincts
+-runs a simulation of voting
+-includes a ToString
+
+simulation.h
+
+-headerfile for simulation.cc
+
+configuration.cc
+
+-reads a config file and sets variables to respective data
+-includes a ToString
+
+configuration.h
+
+-headerfile for configuration.cc
+-contains declaration for most data variables
+
+
+
