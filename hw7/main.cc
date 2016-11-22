@@ -11,6 +11,8 @@ static const string kTag = "MAIN: ";
 
 int main(int argc, char *argv[])
 {
+  // Declare dummy strings for all filenames, including:
+  //  config, precint, log, out_file, outstring
   string config_filename;
   string pct_filename = "XX";
   string log_filename = "XX";
