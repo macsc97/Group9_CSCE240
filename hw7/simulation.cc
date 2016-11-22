@@ -4,7 +4,12 @@
 *
 * Author/copyright:  Duncan Buell
 * Date: 19 July 2016
-*
+* 
+* Modified by Michael Cantwell on 11/22/16
+* -Added correct spacing
+* 
+* Michael Cantwell on 11/22/16
+* -Added comments
 **/
 
 static const string kTag = "SIM: ";
@@ -30,18 +35,33 @@ Simulation::~Simulation()
 /****************************************************************
 * General functions.
 **/
+/****************************************************************
+* ReadPrecincts Function
+* 
+* A simple function to detect data and pass it along to the
+* onepct class. When there is data, the function creates a new
+* instance of onepct. The function then calls the ReadData
+* function of the new precinct to fill in its own data.
+* Last the function adds the new instance of onepct to a map.
+* 
+**/
 void Simulation::ReadPrecincts(Scanner& infile) {
 
   while (infile.HasNext()) {
-  
+    //when the Scanner has file to read, it creates a precinct
+    //and calls that new precinct's ReadData function
     OnePct new_pct;
     new_pct.ReadData(infile);
+    //adds new precinct to a map of precincts
     pcts_[new_pct.GetPctNumber()] = new_pct;
   } // while (infile.HasNext()) {
 
 } // void Simulation::ReadPrecincts(Scanner& infile) {
 
 /****************************************************************
+ * RunSimulation Function 
+ * 
+ * 
 **/
 void Simulation::RunSimulation(const Configuration& config, 
                                MyRandom& random, ofstream& out_stream)
