@@ -1,9 +1,24 @@
 #include "configuration.h"
 /****************************************************************
  * Implementation for the 'Configuration' class.
- *
+ * 
+ * Only has two functions. The first is the ReadConfiguration
+ * function which main purpose is to take in a Scanner to 
+ * parse a correctly formatted file into the appropriate 
+ * variables. It then takes in the data in dataallsorted.txt
+ * and stores it as well.
+ * The second function is the simple ToString function
+ * which builds a string of the data associated with this class.
+ * 
  * Author/copyright:  Duncan Buell. All rights reserved.
  * Date: 6 October 2016
+ * 
+ * Modified by Michael Cantwell on 11/21/16
+ * -Added correct spacing to code
+ *
+ * Michael Cantwell on 11/22/16
+ * -Added comments
+ *
 **/
 
 static const string kTag = "CONFIG: ";
@@ -35,15 +50,28 @@ int Configuration::GetMaxServiceSubscript() const {
  * General functions.
 **/
 /****************************************************************
+ * ReadConfiguration Function
+ * 
+ * Takes in a Scanner, then uses that to parse into its
+ * appropriate values the file the Scanner is using.
+ * Variables are filled in as the Scanner goes through a 
+ * properly formatted file. Variables are declared in 
+ * header file.
+ * Then it opens up dataallsorted.txt and parses its
+ * data into a vector.
+ * 
 **/
 void Configuration::ReadConfiguration(Scanner& instream) {
 /*
 */
+  //parse data in through Scanner
   string line;
   ScanLine scanline;
   
+  //break input down into lines
   line = instream.NextLine();
   scanline.OpenString(line);
+  //breaks apart each line into the corresponding int values
   seed_ = scanline.NextInt();
   election_day_length_hours_ = scanline.NextInt();
   election_day_length_seconds_ = election_day_length_hours_ * 3600;
@@ -58,22 +86,27 @@ void Configuration::ReadConfiguration(Scanner& instream) {
   arrival_zero_ = scanline.NextDouble();
   
   for (int sub = 0; sub < election_day_length_hours_; ++sub) {
-  
+    //doubles are taken from the input and pushed into a vector
     double input = scanline.NextDouble();
     arrival_fractions_.push_back(input);
   }
   
+  //open dataallsorted.txt next
   Scanner service_times_file;
   service_times_file.OpenFile("dataallsorted.txt");
   
   while (service_times_file.HasNext()) {
-  
+    //fill in a vector with this data 
     int thetime = service_times_file.NextInt();
     actual_service_times_.push_back(thetime);
   }
 }
 
 /****************************************************************
+ * ToString Function
+ * 
+ * When called it builds a string consisting of all of the 
+ * relevant data retrieved by the class. Pretty self-explanitory.
 **/
 string Configuration::ToString()
 {
