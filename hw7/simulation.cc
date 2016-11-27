@@ -10,6 +10,10 @@
 * 
 * Michael Cantwell on 11/22/16
 * -Added comments
+* 
+* Michael Cantwell on 11/26/16
+* -Added more comments
+* 
 **/
 
 static const string kTag = "SIM: ";
@@ -61,7 +65,17 @@ void Simulation::ReadPrecincts(Scanner& infile) {
 /****************************************************************
  * RunSimulation Function 
  * 
- * 
+ * This function basically goes through and calls the individual
+ * simulation running functions of the different instances of
+ * precincts. First it starts a for loop that iterates through 
+ * the map of precincts. It then creates a precinct instance of
+ * each precinct encountered in the map. Then if the expected 
+ * voters number is outside of the expected to simulation 
+ * numbers it continues the code. The precinct's toString is called
+ * and then put into the output string. Then the precinct's
+ * RunSimulationPct function is called. 
+ * The for loop ends and the output string is sent to 
+ * a function in the Utils that outputs the string.
 **/
 void Simulation::RunSimulation(const Configuration& config, 
                                MyRandom& random, ofstream& out_stream)
@@ -70,26 +84,36 @@ void Simulation::RunSimulation(const Configuration& config,
   string outstring = "XX";
   int pct_count_this_batch = 0;
   
+  //for loop that iterates through the precincts
   for(auto iterPct = pcts_.begin(); iterPct != pcts_.end(); ++iterPct)
   {
   
+    //create a precinct instance and move the iterator
     OnePct pct = iterPct->second;
     
+    //fill in variables from precinct
     int expected_voters = pct.GetExpectedVoters();
     
+    //if the expected voters is less than the minimum expected or greater
+    //than the maximum expected then the code continues
     if ((expected_voters <=  config.min_expected_to_simulate_) || 
         (expected_voters >   config.max_expected_to_simulate_)) continue;
     
+    //build the output string with data from the precinct's ToString
     outstring = kTag + "RunSimulation for pct " + "\n";
     outstring += kTag + pct.ToString() + "\n";
     Utils::Output(outstring, out_stream, Utils::log_stream);
     
+    //increment the precinct count
     ++pct_count_this_batch;
+    //call the precinct class's RunSimulationPct function
     pct.RunSimulationPct(config, random, out_stream);
     
     //    break; // we only run one pct right now
   } // for(auto iterPct = pcts_.begin(); iterPct != pcts_.end(); ++iterPct)
   
+  //add Precinct count to output string
+  //comments following code are what the called functions do
   outstring = kTag + "PRECINCT COUNT THIS BATCH "
   + Utils::Format(pct_count_this_batch, 4) + "\n";
   //  Utils::Output(outstring, out_stream);
@@ -103,15 +127,20 @@ void Simulation::RunSimulation(const Configuration& config,
 
 /****************************************************************
 * Usual 'ToString'.
+* 
+* Use a for loop to go through the map of precincts and call
+* each individual precinct's toString function and adds it to
+* the output string.
 **/
 string Simulation::ToString()
 {
 
   string s = "";
   
+  //use for loop to iterate through the map
   for(auto iterPct = pcts_.begin(); iterPct != pcts_.end(); ++iterPct)
   {
-  
+    //add each precinct's toString to the output string
     s += kTag + (iterPct->second).ToString() + "\n";
   }
   
