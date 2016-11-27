@@ -5,6 +5,9 @@
 * Author/copyright:  Duncan Buell. All rights reserved.
 * Date: 6 October 2016
 *
+
+*edit nov 27-Sebastian Martin
+* - added comments
 **/
 
 static const string kTag = "ONEVOTER: ";
@@ -15,6 +18,13 @@ static const string kTag = "ONEVOTER: ";
 OneVoter::OneVoter() {
 }
 /****************************************************************
+*sets up original variables for a specific voter
+ * Parameters:
+ *   sequence- the spot of the voter in the sequence
+     arrival_seconds-the arrival time of the voter
+     duration_seconds- how long the voter was there
+ *
+ 
 **/
 OneVoter::OneVoter(int sequence, int arrival_seconds, int duration_seconds) {
 
@@ -59,6 +69,8 @@ int OneVoter::GetStationNumber() const {
 **/
 
 /****************************************************************
+This class assigns a certain station to a voter, it is based 
+off the station numbers, and the start time
 **/
 void OneVoter::AssignStation(int station_number, int start_time_seconds) {
 
@@ -69,6 +81,7 @@ void OneVoter::AssignStation(int station_number, int start_time_seconds) {
 }
 
 /****************************************************************
+accessors
 **/
 int OneVoter::GetTimeDoneVoting() const {
 
@@ -83,6 +96,8 @@ int OneVoter::GetTimeInQ() const {
 }
 
 /****************************************************************
+this will return the time in a format with hours/minutes/seconds
+for the current time_in_seconds and offset_hours*3600
 **/
 string OneVoter::GetTOD(int time_in_seconds) const {
 
@@ -93,9 +108,12 @@ string OneVoter::GetTOD(int time_in_seconds) const {
 }
 
 /****************************************************************
+this method will take in the time that it has taken for a voter in 
+seconds. It will then convery this into an hour/minute/second format
+and return it as a string
 **/
 string OneVoter::ConvertTime(int time_in_seconds) const {
-
+  //initilizing variables
   int hours = 0;
   int minutes = 0;
   int seconds = 0;
@@ -132,6 +150,8 @@ string OneVoter::ConvertTime(int time_in_seconds) const {
 } // string OneVoter::ConvertTime(int time_in_seconds) const
 
 /****************************************************************
+*this method will format the data for the specific voter in order
+for it to be printed out, and it will be returned as a string
 **/
 string OneVoter::ToString() {
 
@@ -155,7 +175,7 @@ string OneVoter::ToString() {
 } // string OneVoter::toString()
 
 /****************************************************************
-* 
+* This method will print out a formatted header for the files
 **/
 string OneVoter::ToStringHeader() {
 
