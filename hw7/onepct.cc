@@ -53,26 +53,30 @@ int OnePct::GetPctNumber() const {
 * General functions.
 **/
 /******************************************************************************
+ This method uses iterators to walk through the maps and initilize the local variable
+ it will also compute the mean_wait_seconds_, and the  wait_dev_seconds_
 **/
 void OnePct::ComputeMeanAndDev() {
-
+  //initilizing variables
   int sum_of_wait_times_seconds = 0;
   double sum_of_adjusted_times_seconds = 0.0;
-  sum_of_wait_times_seconds = 0;
+  //sum_of_wait_times_seconds = 0;//redundent
   multimap<int, OneVoter>::iterator iter_multimap;
-  
+  //ierates through the map and initilizes the instances of "voter"
+  //And increasues the sum of the wait time per voter
   for (iter_multimap = voters_done_voting_.begin(); 
        iter_multimap != voters_done_voting_.end(); ++iter_multimap) {
     
     OneVoter voter = iter_multimap->second;
     sum_of_wait_times_seconds += voter.GetTimeWaiting();
   }
-  
+  //computes the wait_mean_seconds_
   wait_mean_seconds_ = static_cast<double>(sum_of_wait_times_seconds)/
   static_cast<double>(pct_expected_voters_);
   
   sum_of_adjusted_times_seconds = 0.0;
-  
+  //This iterator, changes the wait mean time and calculates
+  //the adjusted value per voter.
   for (iter_multimap = voters_done_voting_.begin(); 
        iter_multimap != voters_done_voting_.end(); ++iter_multimap) {
   
@@ -82,30 +86,34 @@ void OnePct::ComputeMeanAndDev() {
   
     vsum_of_adjusted_times_seconds += (this_addin) * (this_addin);
   }
-  
+  //This calculates the wait_dev_seconds_ and 
   wait_dev_seconds_ = sqrt(sum_of_adjusted_times_seconds /
   static_cast<double>(pct_expected_voters_));
 
 }
 
 /****************************************************************
+This class creates voters to be used in the simulation. It will
+first clear the current backup, and reset the voters. Using the 
+random seeds it forms voters to be used.
 **/
 void OnePct::CreateVoters(const Configuration& config, 
                           MyRandom& random, ofstream& out_stream) {
+  //initilizing variables
   
   int duration = 0;
   int arrival = 0;
   int sequence = 0;
   double percent = 0.0;
   string outstring = "XX";
-  
+  //clearing current backup of voters
   voters_backup_.clear();
   sequence = 0;
   
   percent = config.arrival_zero_;
   int voters_at_zero = round((percent / 100.0) * pct_expected_voters_);
   arrival = 0;
-  
+  //creates a new voter to be used
   for (int voter = 0; voter < voters_at_zero; ++voter) {
   
     int durationsub = random.RandomUniformInt(0, config.GetMaxServiceSubscript());
@@ -114,9 +122,9 @@ void OnePct::CreateVoters(const Configuration& config,
     voters_backup_.insert(std::pair<int, OneVoter>(arrival, one_voter));
     ++sequence;
   }
-  
+  //creates a line of new voters
   for (int hour = 0; hour < config.election_day_length_hours_; ++hour) {
-  
+    
     percent = config.arrival_fractions_.at(hour);
     int voters_this_hour = round((percent / 100.0) * pct_expected_voters_);
     if (0 == hour%2) ++voters_this_hour;
@@ -129,7 +137,7 @@ void OnePct::CreateVoters(const Configuration& config,
       arrival += interarrival;
       int durationsub = random.RandomUniformInt(0, config.GetMaxServiceSubscript());
       duration = config.actual_service_times_.at(durationsub);
-      
+      //increases the backup of voters
       OneVoter one_voter(sequence, arrival, duration);
       voters_backup_.insert(std::pair<int, OneVoter>(arrival, one_voter));
       ++sequence;
@@ -138,6 +146,8 @@ void OnePct::CreateVoters(const Configuration& config,
 }
 
 /******************************************************************************
+This method will do the statistic calculations for the class, it will also
+format and print all of this
 **/
 int OnePct::DoStatistics(int iteration, const Configuration& config, 
                          int station_count, map<int, int>& map_for_histo, 
@@ -145,10 +155,9 @@ int OnePct::DoStatistics(int iteration, const Configuration& config,
 
   string outstring = "\n";
   map<int, int> wait_time_minutes_map;
-
-/////////////////////////////////////////////////////////////////////////////
   multimap<int, OneVoter>::iterator iter_multimap;
-  
+  //will get the voting time from each voter and insert them into 
+  //their respective maps
   for (iter_multimap = this->voters_done_voting_.begin(); 
        iter_multimap != this->voters_done_voting_.end(); ++iter_multimap) {
   
@@ -157,13 +166,13 @@ int OnePct::DoStatistics(int iteration, const Configuration& config,
   
     ++(wait_time_minutes_map[wait_time_minutes]);
     ++(map_for_histo[wait_time_minutes]);
-  }
+  }//end for
     
-/////////////////////////////////////////////////////////////////////////////
   int toolongcount = 0;
   int toolongcountplus10 = 0;
   int toolongcountplus20 = 0;
-  
+  //this for loop will see if the wait time is above a certain amount
+  //and if it is so, will edit the variables
   for (auto iter = wait_time_minutes_map.rbegin(); 
        iter != wait_time_minutes_map.rend(); ++iter) {
   
@@ -178,11 +187,10 @@ int OnePct::DoStatistics(int iteration, const Configuration& config,
     
     if (waittime > config.wait_time_minutes_that_is_too_long_+20)
     toolongcountplus20 += waitcount;
-  }
-  
-/////////////////////////////////////////////////////////////////////////////
+  }//end for
+  //will call the function ComputeMeanAndDev
   ComputeMeanAndDev();
-  
+  //this will format all of the statistics and output it
   outstring = "";
   outstring += kTag + Utils::Format(iteration, 3) + " "
   + Utils::Format(pct_number_, 4) + " "
@@ -202,18 +210,20 @@ int OnePct::DoStatistics(int iteration, const Configuration& config,
   + "\n";
   
   Utils::Output(outstring, out_stream, Utils::log_stream);
-  
+  //clears the map for another use
   wait_time_minutes_map.clear();
-  
+  //returns the count of the longest waiting time
   return toolongcount;
 }
 
 /****************************************************************
+this methoid will take in the data using the "infile" and initilize
+all of the variables based on the line of input
 **/
 void OnePct::ReadData(Scanner& infile) {
-
+  //if the input has a next line
   if (infile.HasNext()) {
-  
+   //initilizing all of the variables
     pct_number_ = infile.NextInt();
     pct_name_ = infile.Next();
     pct_turnout_ = infile.NextDouble();
@@ -419,11 +429,14 @@ Utils::log_stream << kTag << "PENDING, VOTING, DONE    "
 } // void Simulation::RunSimulationPct2()
 
 /****************************************************************
+This method will print out the information for the specific precinct
+This also uses the Utils and the formatting that is included in it
+
 **/
 string OnePct::ToString() {
 
   string s = "";
-
+  //adding the info to the string to be printed
   s += Utils::Format(pct_number_, 4);
   s += " " + Utils::Format(pct_name_, 25, "left");
   s += Utils::Format(pct_turnout_, 8, 2);
@@ -447,6 +460,8 @@ string OnePct::ToString() {
 } // string OnePct::ToString()
 
 /****************************************************************
+This will print out the current VoterMap using an iterator to walk
+through the map
 **/
 string OnePct::ToStringVoterMap(string label, 
                                 multimap<int, OneVoter> themap) {
@@ -456,7 +471,7 @@ string OnePct::ToStringVoterMap(string label,
   s += "\n" + label + " WITH " + Utils::Format((int)themap.size(), 6)
   + " ENTRIES\n";
   s += OneVoter::ToStringHeader() + "\n";
-  
+  //walking through the map with the iter
   for (auto iter = themap.begin(); iter != themap.end(); ++iter) {
   
     s += (iter->second).ToString() + "\n";
