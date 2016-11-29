@@ -1,18 +1,18 @@
 #include "configuration.h"
 /****************************************************************
  * Implementation for the 'Configuration' class.
- * 
- * This class only has two functions. The first is the
- * 'ReadConfiguration' function, the main purpose of which is
- * to take in a Scanner that parses a correctly formatted file
- * into the appropriate variables. It then takes in the data
- * contained within 'dataallsorted.txt' and stores it as well.
- * The second function is the simple 'ToString' function
- * which builds a string of the data associated with this class.
- * 
+ *
  * Author/copyright:  Duncan Buell. All rights reserved.
  * Date last modified: 29 November 2016
- *
+ * 
+ * Objective; This class only has two functions. First function is
+ * 'ReadConfiguration, the main purpose of which is to take in a 
+ * Scanner that parses a correctly formatted file into the 
+ * appropriate variables. It then takes in the data contained
+ * within 'dataallsorted.txt' and stores it as well. The second
+ * function is the simple 'ToString' function which builds a 
+ * string of the data associated with this class.
+ * 
  * Modified by: CSCE240 Group9 Fall 2016
  * (M.CANTWELL, R.CARFF, A.FRAZIER, C.KAYLOR, S.MARTIN)
  * 
