@@ -3,8 +3,38 @@
 * Implementation for the 'OnePct' class.
 *
 * Author/copyright:  Duncan Buell. All rights reserved.
-* Date: 21 May 2013
+* Date last modified: 29 November 2
 *
+* Modified by: CSCE240 Group9 Fall 2016
+* (M.CANTWELL, R.CARFF, A.FRAZIER, C.KAYLOR, S.MARTIN)
+*
+*
+* Objective: This class has multiple functions. The first two
+* functions are merely accessors. The purpose of the first 'real'
+* function, 'ComputeMeanandDev', is to utilize iterators to walk 
+* through the maps and initilize the local variables. It also 
+* computes the mean_wait_seconds_, and the wait_dev_seconds_.
+* 'CreateVoters' generates a 'voter' to be used in the simulation.
+* It clears the backup, resets the voter, and utilizes a seed to
+* form the voter to be used. 'DoStatistics' iterates over maps 
+* and performs calculations to determine stats such as wait time,
+* and also formats these statistics. 'ReadData' parses 'infile'
+* and assigns the values contained within to pct_xxx variables.
+* 'RunSimulationPct' does the work of running the overall
+* simulation. It calculates the min and max station counts based
+* on expected voters and time to vote average, generates multiple
+* iterations of voters, and calls RunSimulationPct2 to perform 
+* the actual voting calculations. Calculates a histogram 
+* breakdown of the stations. 'RunSimulationPct2' simulates
+* voters in a precint voting. It assigns voters to a free station,
+* and simulates the queue of voters waiting for a free station.
+* 'ToString' does the standard formatting of variables to a readable
+* string, and 'ToStringVoterMap' does the same.
+*
+*
+*Updated on 11/29/16 A. Frazier
+*-Added objective overview, formatting and commenting changes.
+*-Added comments for RunSimulationPct and RunSimulationPct2,
 **/
 
 static const string kTag = "OnePct: ";
@@ -54,7 +84,7 @@ int OnePct::GetPctNumber() const {
 **/
 /******************************************************************************
  This method uses iterators to walk through the maps and initilize the local variable
- it will also compute the mean_wait_seconds_, and the  wait_dev_seconds_
+ it will also compute the mean_wait_seconds_, and the wait_dev_seconds_
 **/
 void OnePct::ComputeMeanAndDev() {
   //initilizing variables
@@ -243,19 +273,26 @@ void OnePct::ReadData(Scanner& infile) {
 } // void OnePct::ReadData(Scanner& infile)
 
 /****************************************************************
+* This function does the work of the class. It calculates the min
+* and max station counts based on expected voters and time to vote
+* average, generates multiple iterations of voters, and calls 
+* RunSimulationPct2 to perform the actual voting calculations.
+* Also calculates a histogram breakdown of the stations.
 **/
 void OnePct::RunSimulationPct(const Configuration& config, 
                               MyRandom& random, ofstream& out_stream) {
   
   string outstring = "XX";
-
+  // calculates min and max station counts based on expected voters
+  // in the precint
   int min_station_count = pct_expected_voters_ * config.time_to_vote_mean_seconds_;
   min_station_count = min_station_count / (config.election_day_length_hours_*3600);
   
   if (min_station_count <= 0) min_station_count = 1;
   
   int max_station_count = min_station_count + config.election_day_length_hours_;
-  
+  // calculates the stations that will be used based on min and max
+  // station counts.
   bool done_with_this_count = false;
   for (int stations_count = min_station_count; 
        stations_count <= max_station_count; ++stations_count) {
@@ -268,13 +305,14 @@ void OnePct::RunSimulationPct(const Configuration& config,
     outstring = kTag + this->ToString() + "\n";
     Utils::Output(outstring, out_stream, Utils::log_stream);
     for (int iteration = 0; iteration < config.number_of_iterations_; ++iteration) {
-    
+      // generates multiple iterations of voters, and calls RunSimulationPct2 to 
+      // perform the actual voting calculations
       this->CreateVoters(config, random, out_stream);
-  
+      // resets voters
       voters_pending_ = voters_backup_;
       voters_voting_.clear();
       voters_done_voting_.clear();
-  
+      // calls the RunSimulationPct2 to calculate votes based on # of stations
       this->RunSimulationPct2(stations_count);
       int number_too_long = DoStatistics(iteration, config, stations_count,
       map_for_histo, out_stream);
@@ -283,7 +321,7 @@ void OnePct::RunSimulationPct(const Configuration& config,
         done_with_this_count = false;
       }
     }
-  
+    // resets the maps
     voters_voting_.clear();
     voters_done_voting_.clear();
   
@@ -291,7 +329,7 @@ void OnePct::RunSimulationPct(const Configuration& config,
     Utils::Output(outstring, out_stream, Utils::log_stream);
     
     if (stations_to_histo_.count(stations_count) > 0) {
-    
+      // formats a histogram of the stations
       outstring = "\n" + kTag + "HISTO " + this->ToString() + "\n";
       outstring += kTag + "HISTO STATIONS "
       + Utils::Format(stations_count, 4) + "\n";
@@ -335,17 +373,20 @@ void OnePct::RunSimulationPct(const Configuration& config,
 }
   
 /****************************************************************
-*
+* Performs the simulation of voters in a precint voting based on 
+* the station count calculated in RunSimulationPct. Assigns
+* voters to a free station, and simulates the queue of voters
+* waiting for a free station.
 **/
 void OnePct::RunSimulationPct2(int stations_count) {
-
+  // resets all stations to clear
   free_stations_.clear();
   
   for (int i = 0; i < stations_count; ++i) {
-  
+    //generates stations based on station count
     free_stations_.push_back(i);
   } 
-
+  // resets voters
   voters_voting_.clear();
   voters_done_voting_.clear();
   
@@ -354,7 +395,7 @@ void OnePct::RunSimulationPct2(int stations_count) {
   while (!done) {
     
     for (auto iter = voters_voting_.begin(); iter != voters_voting_.end(); ++iter) {
-    
+      // iterates over voters, and assignes each to a station
       if (second == iter->first) {
     
         OneVoter one_voter = iter->second;
@@ -370,7 +411,7 @@ void OnePct::RunSimulationPct2(int stations_count) {
     vector<map<int, OneVoter>::iterator > voters_pending_to_erase_by_iterator;
   
     for (auto iter = voters_pending_.begin(); iter != voters_pending_.end(); ++iter) {
-  
+      // begins the queue for voters pending, and removes them when free stations open up
       if (second >= iter->first) {       // if they have already arrived
   
         if (free_stations_.size() > 0) { // and there are free stations
