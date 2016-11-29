@@ -2,12 +2,12 @@
 /****************************************************************
  * Implementation for the 'Configuration' class.
  * 
- * Only has two functions. The first is the ReadConfiguration
- * function which main purpose is to take in a Scanner to 
- * parse a correctly formatted file into the appropriate 
- * variables. It then takes in the data in dataallsorted.txt
- * and stores it as well.
- * The second function is the simple ToString function
+ * This class only has two functions. The first is the
+ * 'ReadConfiguration' function, the main purpose of which is
+ * to take in a Scanner that parses a correctly formatted file
+ * into the appropriate variables. It then takes in the data
+ * contained within 'dataallsorted.txt' and stores it as well.
+ * The second function is the simple 'ToString' function
  * which builds a string of the data associated with this class.
  * 
  * Author/copyright:  Duncan Buell. All rights reserved.
@@ -18,6 +18,9 @@
  *
  * Michael Cantwell on 11/22/16
  * -Added comments
+ *
+ * Anthony Frazier on 11/29/16
+ *-Minor formatting and grammar changes.
  *
 **/
 
@@ -41,9 +44,7 @@ Configuration::~Configuration() {
 /****************************************************************
 **/
 int Configuration::GetMaxServiceSubscript() const {
-  
   return static_cast<int>(actual_service_times_.size()) - 1;
-
 }
 
 /****************************************************************
@@ -52,13 +53,12 @@ int Configuration::GetMaxServiceSubscript() const {
 /****************************************************************
  * ReadConfiguration Function
  * 
- * Takes in a Scanner, then uses that to parse into its
- * appropriate values the file the Scanner is using.
+ * Takes in a Scanner, then uses that to parse data into the
+ * appropriate values the file in the Scanner is using.
  * Variables are filled in as the Scanner goes through a 
- * properly formatted file. Variables are declared in 
- * header file.
- * Then it opens up dataallsorted.txt and parses its
- * data into a vector.
+ * properly formatted file. Variables are declared in a 
+ * header file. Then it opens up 'dataallsorted.txt' and parses
+ * the data within into a vector.
  * 
 **/
 void Configuration::ReadConfiguration(Scanner& instream) {
@@ -106,7 +106,7 @@ void Configuration::ReadConfiguration(Scanner& instream) {
  * ToString Function
  * 
  * When called it builds a string consisting of all of the 
- * relevant data retrieved by the class. Pretty self-explanitory.
+ * relevant data retrieved by the class. Pretty self-explanatory.
 **/
 string Configuration::ToString()
 {
@@ -138,8 +138,7 @@ string Configuration::ToString()
   s += Utils::Format(0, 2) + "-" + Utils::Format(0, 2);
   s += " : " + Utils::Format(arrival_zero_, 7, 2) + "\n";
   
-  for (UINT sub = 0; sub < arrival_fractions_.size(); ++sub) {
-    
+  for (UINT sub = 0; sub < arrival_fractions_.size(); ++sub) {  
     s += kTag;
     s += Utils::Format(offset+sub, 2) + "-" + Utils::Format(offset+sub+1, 2);
     s += " : " + Utils::Format(arrival_fractions_.at(sub), 7, 2) + "\n";
@@ -149,4 +148,3 @@ string Configuration::ToString()
   
   return s;
 }
-
