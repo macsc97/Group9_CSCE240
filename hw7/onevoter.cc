@@ -3,10 +3,27 @@
 * Implementation for the 'OneVoter' class.
 *
 * Author/copyright:  Duncan Buell. All rights reserved.
-* Date: 6 October 2016
+* Date last modified: 29 November 2016
 *
-
-*edit nov 27-Sebastian Martin
+* Modified by: CSCE240 Group9 Fall 2016
+* (M.CANTWELL, R.CARFF, A.FRAZIER, C.KAYLOR, S.MARTIN)
+*
+* Objective: This class has multiple functions. There are many
+* accessor type functions for multipe variables, including:
+* GetTOD, GetStationNumber, GetTimeArrival, GetTimeDoneVoting, 
+* GetTimeInQ, and GetTimeWaiting. The constructor sets up 'sequence', 
+* 'time_arrival_seconds', 'time_start_voting_seconds', 
+* 'time_vote_duration_seconds', and the initial station
+* 'which_station'. 'AssignStation' assigns a voter to a station.
+* 'ConvertTime' returns a formatted string of time in an
+* 'hour:minutes:seconds' format. 'ToString' returns a formatted
+* string, as per usual. 'ToStringHeader' returns a formatted string
+* for the variables in the header file.
+*
+* November 29, 2016 A. Frazier
+* -Added objective overview, commenting and formatting changes.
+*
+* edit nov 27-Sebastian Martin
 * - added comments
 **/
 
