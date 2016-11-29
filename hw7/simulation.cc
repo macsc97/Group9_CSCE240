@@ -3,7 +3,18 @@
 * Implementation for the 'Simulation' class.
 *
 * Author/copyright:  Duncan Buell
-* Date: 19 July 2016
+* Date last modified: 29 November 2016
+*
+* Modified by: CSCE240 Group9 Fall 2016
+* (M.CANTWELL, R.CARFF, A.FRAZIER, C.KAYLOR, S.MARTIN)
+*
+* Objective: The first function 'ReadPrecints' utilizes a scanner
+* to parse a file 'infile' of precint data. Utilizes the 'ReadData'
+* function from 'onepct.cc' to parse the data from the file and =
+* create a new instance of precint. 'RunSimulation' actually
+* performs the simulation, and iterates over all of the precints
+* and calls 'RunSimulationPct' for each precint. 'ToString' and
+* 'ToStringPcts' work as expected, and return a formatted string
 * 
 * Modified by Michael Cantwell on 11/22/16
 * -Added correct spacing
@@ -13,7 +24,9 @@
 * 
 * Michael Cantwell on 11/26/16
 * -Added more comments
-* 
+*
+* Updated 11/19/16 A. Frazier
+*- Added Objective overview and comment changes
 **/
 
 static const string kTag = "SIM: ";
