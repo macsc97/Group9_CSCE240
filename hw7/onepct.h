@@ -2,7 +2,10 @@
  * Header for the 'OnePct' class
  *
  * Author/copyright:  Duncan Buell
- * Date: 6 October 2016
+ * Date last modified: 29 November 2016
+ *
+ * Modified by: CSCE240 Group9 Fall 2016
+ * (M.CANTWELL, R.CARFF, A.FRAZIER, C.KAYLOR, S.MARTIN)
  *
 **/
 
@@ -24,6 +27,7 @@ using namespace std;
 #include "myrandom.h"
 #include "onevoter.h"
 
+//dummy values
 static const double kDummyDouble = -88.88;
 static const int kDummyInt = -999;
 static const string kDummyString = "dummystring";
@@ -80,7 +84,6 @@ private:
                     
   void ComputeMeanAndDev();
   void RunSimulationPct2(int stations);
-
 };
 
 #endif // ONEPCT_H
