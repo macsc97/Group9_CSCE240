@@ -8,7 +8,6 @@
 * Modified by: CSCE240 Group9 Fall 2016
 * (M.CANTWELL, R.CARFF, A.FRAZIER, C.KAYLOR, S.MARTIN)
 *
-*
 * Objective: This class has multiple functions. The first two
 * functions are merely accessors. The purpose of the first 'real'
 * function, 'ComputeMeanandDev', is to utilize iterators to walk 
