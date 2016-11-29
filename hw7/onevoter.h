@@ -2,7 +2,10 @@
  * Header for the 'OneVoter' class
  *
  * Author/copyright:  Duncan Buell
- * Date: 6 October 2016
+ * Date last modified: 29 November 2016
+ *
+ * Modified by: CSCE240 Group9 Fall 2016
+ * (M.CANTWELL, R.CARFF, A.FRAZIER, C.KAYLOR, S.MARTIN)
  *
 **/
 
@@ -13,6 +16,7 @@
 
 using namespace std;
 
+//dummy variable
 static int kDummyVoterInt = -333;
 
 class OneVoter {
