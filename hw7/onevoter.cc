@@ -49,6 +49,7 @@ OneVoter::OneVoter(int sequence, int arrival_seconds, int duration_seconds) {
   time_arrival_seconds_ = arrival_seconds;
   time_start_voting_seconds_ = 0;
   time_vote_duration_seconds_ = duration_seconds;
+  // magic number -1   
   which_station_ = -1;
 }
 
