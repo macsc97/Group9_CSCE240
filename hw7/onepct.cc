@@ -91,7 +91,7 @@ void OnePct::ComputeMeanAndDev() {
   double sum_of_adjusted_times_seconds = 0.0;
   //sum_of_wait_times_seconds = 0;//redundent
   multimap<int, OneVoter>::iterator iter_multimap;
-  //ierates through the map and initilizes the instances of "voter"
+  //iterates through the map and initilizes the instances of "voter"
   //And increasues the sum of the wait time per voter
   for (iter_multimap = voters_done_voting_.begin(); 
        iter_multimap != voters_done_voting_.end(); ++iter_multimap) {
