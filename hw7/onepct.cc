@@ -86,12 +86,12 @@ int OnePct::GetPctNumber() const {
  it will also compute the mean_wait_seconds_, and the wait_dev_seconds_
 **/
 void OnePct::ComputeMeanAndDev() {
-  //initilizing variables
+  //initializing variables
   int sum_of_wait_times_seconds = 0;
   double sum_of_adjusted_times_seconds = 0.0;
   //sum_of_wait_times_seconds = 0;//redundent
   multimap<int, OneVoter>::iterator iter_multimap;
-  //iterates through the map and initilizes the instances of "voter"
+  //iterates through the map and initializes the instances of "voter"
   //And increasues the sum of the wait time per voter
   for (iter_multimap = voters_done_voting_.begin(); 
        iter_multimap != voters_done_voting_.end(); ++iter_multimap) {
@@ -128,7 +128,7 @@ random seeds it forms voters to be used.
 **/
 void OnePct::CreateVoters(const Configuration& config, 
                           MyRandom& random, ofstream& out_stream) {
-  //initilizing variables
+  //initializing variables
   
   int duration = 0;
   int arrival = 0;
@@ -246,13 +246,13 @@ int OnePct::DoStatistics(int iteration, const Configuration& config,
 }
 
 /****************************************************************
-this methoid will take in the data using the "infile" and initilize
+this methoid will take in the data using the "infile" and initialize
 all of the variables based on the line of input
 **/
 void OnePct::ReadData(Scanner& infile) {
   //if the input has a next line
   if (infile.HasNext()) {
-   //initilizing all of the variables
+   //initializing all of the variables
     pct_number_ = infile.NextInt();
     pct_name_ = infile.Next();
     pct_turnout_ = infile.NextDouble();
@@ -283,7 +283,7 @@ void OnePct::RunSimulationPct(const Configuration& config,
   
   string outstring = "XX";
   // calculates min and max station counts based on expected voters
-  // in the precint
+  // in the precinct
   int min_station_count = pct_expected_voters_ * config.time_to_vote_mean_seconds_;
   min_station_count = min_station_count / (config.election_day_length_hours_*3600);
   
